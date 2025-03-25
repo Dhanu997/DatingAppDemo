@@ -10,8 +10,8 @@ builder.Services.AddDbContext<DataContext>(opt =>
 {
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-// builder.Services.AddOpenApi();
+//  Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+//  builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
