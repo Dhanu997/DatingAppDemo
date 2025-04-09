@@ -1,5 +1,6 @@
 using System;
 using System.Net.Sockets;
+using System.Security.Claims;
 using API.Data;
 using API.DTOs;
 using API.Entities;
@@ -15,7 +16,7 @@ namespace API.Controllers;
 // [Route("api/[controller]")] //api/users
 
 [Authorize]
-public class UsersController(IUserRepository userRepository) : BaseApiController
+public class UsersController(IUserRepository userRepository, IMapper mapper) : BaseApiController
 {
     //  private readonly DataContext _context = context;
 
@@ -33,5 +34,19 @@ public class UsersController(IUserRepository userRepository) : BaseApiController
         var user = await userRepository.GetMemberAsync(username);
         if (user == null) return NotFound();
         return user;
+    }
+
+    [HttpPut]
+    public async Task<ActionResult> UpdateUser(MemberUpdateDto memberUpdateDto)
+    {
+        var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (username == null) return BadRequest("No user found in token");
+        var user = await userRepository.GetUserByUsernameAsync(username);
+        if (user == null) return BadRequest("Could not find user");
+
+        mapper.Map(memberUpdateDto, user);
+        if (await userRepository.SaveAllAsync()) return NoContent();
+        return BadRequest("Failed to update user");
     }
 }
