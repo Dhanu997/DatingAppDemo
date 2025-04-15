@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../_models/user';
@@ -7,7 +7,6 @@ import { User } from '../_models/user';
   providedIn: 'root'
 })
 export class AdminService {
-
   baseUrl = environment.apiUrl;
   private http = inject(HttpClient);
 
